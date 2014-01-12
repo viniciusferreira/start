@@ -1,0 +1,16 @@
+[app]
+config		= PPHP"config/";
+controller	= PPHP"controller/";
+model		= PPHP"model/";
+
+[html]
+path 		= ROOT"html/";
+ext 	= ".html";
+image		= ROOT"img/";
+script		= ROOT"script/";
+style		= ROOT"style/";
+
+[url]
+image		= URL"img/";
+script		= URL"script/";
+style		= URL"style/";

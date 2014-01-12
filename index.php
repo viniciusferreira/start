@@ -1,1 +1,1 @@
-<?php include __DIR__.'/php/main.php';
+<?php include '/php/main.php';

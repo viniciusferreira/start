@@ -26,3 +26,13 @@ function p($value, $exit = true){
 	if($exit) exit($o);
 	echo $o;
 }
+
+
+//Debug configurations
+function debug(){
+	define('INITIME', microtime());
+	error_reporting(-1);
+	ini_set('error_reporting', E_ALL);
+	ini_set('display_startup_errors', true);
+	ini_set('display_errors', true);
+}

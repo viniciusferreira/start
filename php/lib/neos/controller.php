@@ -13,8 +13,11 @@ class Controller {
     private $parms = array();
     
     
-    function __construct($url = false){
+    function __construct($url = false, $pathcontroller = false, $defcontroller = false, $defaction = false){
         if($url != false) $this->url = $url;
+		if($pathcontroller != false) $this->pathcontroller = $pathcontroller;
+		if($defcontroller != false) $this->defcontroller = $defcontroller;
+		if($defaction != false) $this->defaction = $defaction;
     }
     
     //get/set parameters

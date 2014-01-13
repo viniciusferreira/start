@@ -63,13 +63,13 @@ class Doc
   }
 
   //Processa todo o HTML
-  function render($php = false, $blade = false){
+  function render($php = true, $blade = true, $zTag = true){
       //Renderiza todas os fragmentos HTML injetados
       foreach($this->views as $view){
-          if($view->getFile()) $view->render($php, $blade); //se existir, processa o HTML.
+          if($view->getFile()) $view->render($php, $blade, $zTag); //se existir, processa o HTML.
       }
       //Renderizando o Layout
-      $this->content = $this->produce($php, $blade);
+      $this->content = $this->produce($php, $blade, $zTag);
       //Retorna o HTML processado
       return $this->content;
   }

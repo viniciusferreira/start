@@ -2,32 +2,30 @@
 //Defines for CORE
 defined('PPHP')     || define('PPHP', __DIR__ . '/');
 defined('LIB')      || define('LIB', PPHP . 'lib/');
-defined('ROOTURL')	|| define('ROOTURL', '/');
-
-//Defines from template
-defined('ROOT')     || define('ROOT', dirname($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME']) . '/');
-defined('RPATH')    || define('RPATH', ((strpos(ROOT, 'phar://') === false) ? ROOT : str_replace('phar://', '', dirname(ROOT) . '/')));
-
-//Defines from template url access
-defined('URL')     	|| define('URL', 'http://'.$_SERVER['SERVER_NAME'].ROOTURL);
 
 //Auxiliar Functions
 include LIB.'neos/functions.php';
 
-//Debug Only
-debug();
+debug();//Debug Only
+
+//Defines for template
+defined('ROOT')     || define('ROOT', dirname($_SERVER['DOCUMENT_ROOT'] . $_SERVER['SCRIPT_NAME']) . '/');
+defined('RPATH')    || define('RPATH', ((strpos(ROOT, 'phar://') === false) ? ROOT : str_replace('phar://', '', dirname(ROOT) . '/')));
+
+//Defines for template to url access
+$base = rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), ' /');
+defined('REQST')    || define('REQST', trim(str_replace($base, '', $_SERVER['REQUEST_URI']), ' /'));
+defined('URL')     	|| define('URL', 'http://'.$_SERVER['SERVER_NAME'].$base.'/');
 
 //Configurations
 class_alias('Lib\Neos\Config', 'o');
 o::load(PPHP.'app.ini'); //load config ini file
 
-//Template engine
-class_alias('Lib\Neos\Html\Doc', 'View'); 
+//Template alias
+class_alias('Lib\Neos\Html\Doc', 'View');
 
-
-//Router
-$url = (isset($_GET['url']) ? $_GET['url'] : '');
-$controller = new Lib\Neos\Controller($url, o::app('controller'));
+//Decode route and instantiate controller
+$controller = new Lib\Neos\Controller(REQST, o::app('controller'));
 
 //Template Engine
 $out = new Lib\Neos\Output($controller->run());

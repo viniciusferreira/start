@@ -64,10 +64,12 @@ class Controller {
         
         //new controller
         $controller = ucfirst($controller);
-        $controller = new $controller($res);
+        $controller = new $controller(); 
     
         //finding a action -----------------------------------------
-        $action = (isset($url[0]) && $url[0] != '' && method_exists($controller, $url[0])) ? strtolower($url[0]) : $this->defaction; //default
+        $action = (isset($url[0]) && $url[0] != '' && method_exists($controller, $url[0])) 
+                    ? strtolower($url[0]) 
+                    : $this->defaction; //default
         if(isset($url[0]) && $action == $url[0]) array_shift($url);
         
         //collecting parameters ------------------------------------

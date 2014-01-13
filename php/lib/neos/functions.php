@@ -29,7 +29,7 @@ function p($value, $exit = true){
 
 
 //Debug configurations
-function debug(){
+function debug($style = null){
 	define('INITIME', microtime());
 	error_reporting(-1);
 	ini_set('error_reporting', E_ALL);

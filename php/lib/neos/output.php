@@ -3,8 +3,6 @@
 namespace Lib\Neos;
 use o;
 
-
-
 class Output {
     
     //Parameters
@@ -30,7 +28,7 @@ class Output {
     
     
     /* DOWNLOAD
-     * 
+     * TODO: pleasy, make tests . . .
      *
      */
     function download($ext, $path){
@@ -57,17 +55,10 @@ class Output {
         exit($dt);
     }
     
-    /* PRINT
-     * Simple p() function
-     */
-    
-    function p($val, $exit = false) {
-        if($exit) exit('<pre>' . print_r($val, true) . '</pre>');
-        echo '<pre>' . print_r($val, true) . '</pre>';
-    }
-    
     /* DEBUG/LOG
        * Save, send or display log string
+       *
+       * TODO: Lack build feature!
        *
        * @param $msg String Mesage
        * @param $mode String Save mode [log, mail, display]
@@ -75,8 +66,7 @@ class Output {
        * @return void
        */
     function _debug($msg, $mode = 'log') {
-       echo '<p style="color:red;font-size:10px;border:1px solid #F00;padding:5px 10px;margin:10px auto;background:#FCC; white-space:pre-wrap"><b>'
-        .date('Y d m H i s').'</b><br>'.$msg.'</p>';
+       $log = date('Y d m H i s').' | '.$msg;
     }
     
     /* Status Bar
@@ -86,10 +76,10 @@ class Output {
      */
     
     function statusBar(){
-        
+        if(!defined('INITIME')) return '';
 	    $t = explode(' ',microtime());
         $i = explode(' ', INITIME);
-	    return '<p class="status">time: '.number_format((($t[0] * 1000)-$i[0] * 1000),1,',','.').' ms</p>';
+	    return '<p style="position: fixed; bottom:0; right: 0; background: #999; color:#000; font-family: \'Oxygen Mono\', monospace; padding: 3px 5px; font-size: 10px; font-weight: normal; font-style: italic; text-shadow:1px 1px 1px #DDD">time: '.number_format((($t[0] * 1000)-$i[0] * 1000),1,',','.').' ms</p>';
     }
     
     function statusBar_old($extended = true){

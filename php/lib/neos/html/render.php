@@ -24,35 +24,36 @@ class Render {
      * @param bool $get	Retorna o produto da renderização para um pós-tratamento
      * @return array|void
     */
-    function produce($php = false, $brade = false){
-        //With blade???
+    function produce($php = true, $brade = true, $zTag = true){
+        //With blade ???
         if($brade) $this->setContent($this->blade($this->getContent()));
 
-        $ponteiro = 0;
-        $content = $this->getContent();
+        //With zTag ???
+        if($zTag) {
+            $ponteiro = -1;
+            $content = $this->getContent();
 
-        //Loop de varredura para o arquivo HTML
-        while($ret = $this->zTag($content, $ponteiro)){
-            $ponteiro = 0 + $ret['-final-'];
-            $vartemp = '';
-            
-            //constant URL
-            if($ret['-tipo-'] == 'var' && $ret['var'] == 'url') $vartemp = URL;
-            elseif (method_exists($this, '_' . $ret['-tipo-'])) $vartemp = $this->{'_' . $ret['-tipo-']}($ret);
+            //Loop de varredura para o arquivo HTML
+            while($ret = $this->zTag($content, $ponteiro)){
+                $ponteiro = 0 + $ret['-final-'];
+                $vartemp = '';
+                
+                //constant URL
+                if($ret['-tipo-'] == 'var' && $ret['var'] == 'url') $vartemp = URL;
+                elseif (method_exists($this, '_' . $ret['-tipo-'])) $vartemp = $this->{'_' . $ret['-tipo-']}($ret);
 
-            //Incluindo o bloco gerado pelas NeosTags
-            $this->setContent(substr_replace($this->getContent(), $vartemp, $ret['-inicio-'], $ret['-tamanho-']));$this->err[] = $ret;
-            
-            //RE-setando o ponteiro depois de adicionar os dados acima
-            $ponteiro = strlen($vartemp) + $ret['-inicio-'];
-        }//while
+                //Incluindo o bloco gerado pelas NeosTags
+                $this->setContent(substr_replace($this->getContent(), $vartemp, $ret['-inicio-'], $ret['-tamanho-']));$this->err[] = $ret;
+                
+                //RE-setando o ponteiro depois de adicionar os dados acima
+                $ponteiro = strlen($vartemp) + $ret['-inicio-'];
+            }//end while
+        }//end zTag
+
+        //"Assessing" PHP contained in HTML
+        if($php) $this->evalPHP();
         
-        //"Avaliando" o PHP contido no HTML
-        if($php) $this->setContent($this->evalPHP());
-        
-        //exit('<pre>'.print_r($this->err, true).'</pre>'.$this->getContent());
-        
-        //retorna o conteudo processado
+        //returns the processed contents
         return $this->getContent();
     }
 
@@ -67,8 +68,8 @@ class Render {
      * @return array|false     array with the data found Ztag or false (not Ztag)
     */
     
-    function zTag(&$arquivo, $ponteiro = 0, $tag = 'z:'){
-        $inicio = strpos($arquivo, '<'.$tag, $ponteiro);
+    function zTag(&$arquivo, $ponteiro = -1, $tag = 'z:'){
+        $inicio = strpos($arquivo, '<'.$tag, $ponteiro + 1);
         if($inicio !== false){
             //get the type (<z:tipo ... )
             $x = substr($arquivo, $inicio, 25);
@@ -171,7 +172,7 @@ class Render {
      * @return string 
     */
     function evalPHP() {
-        extract($this->getValues());
+        extract($this->getVar());
         ob_start();
         eval('?>' . $this->getContent());
 

@@ -15,7 +15,7 @@ defined('RPATH')    || define('RPATH', ((strpos(ROOT, 'phar://') === false) ? RO
 //Defines for template to url access
 $base = rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), ' /');
 defined('REQST')    || define('REQST', trim(str_replace($base, '', $_SERVER['REQUEST_URI']), ' /'));
-defined('URL')     	|| define('URL', 'http://'.$_SERVER['SERVER_NAME'].$base.'/');
+defined('URL')      || define('URL', 'http://'.$_SERVER['SERVER_NAME'].$base.'/');
 
 //Configurations
 class_alias('Lib\Neos\Config', 'o');
